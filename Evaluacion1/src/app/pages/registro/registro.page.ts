@@ -23,22 +23,32 @@ export class RegistroPage implements OnInit {
 
 
   async registrar() {
-    const usuario = {
-      nombre: this.formularioLogin.get('nombre')?.value,
-      password: this.formularioLogin.get('password')?.value,
-    }
+    const nombre = this.formularioLogin.get('nombre')?.value;
+    const password = this.formularioLogin.get('password')?.value;
   
+    if (!nombre || !password) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Todos los campos son requeridos.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+    
+    const usuario = { nombre, password };
+    
     localStorage.setItem('usuario', JSON.stringify(usuario));
     console.log('Usuario registrado:', usuario);
-
-    this.formularioLogin.reset();
-
+  
+    this.formularioLogin.reset();  // Esto limpiará los campos del formulario
+  
     const alert = await this.alertController.create({
-      header: 'Exito',
-      message: 'Usuario registrado con éxito',
+      header: 'Éxito',
+      message: 'Usuario registrado correctamente.',
       buttons: ['OK']
     });
     await alert.present();
-    
   }
+  
 }
